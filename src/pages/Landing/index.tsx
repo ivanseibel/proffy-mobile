@@ -33,7 +33,8 @@ const Landing: React.FC = () => {
       </View>
 
       <Text style={styles.totalConnections}>
-        200 connections already made <Image source={heartIcon} />
+        {`200 connections already made `}
+        <Image source={heartIcon} />
       </Text>
     </View>
   );
