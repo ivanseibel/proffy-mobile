@@ -30,6 +30,7 @@
     ],
     "rules": {
       "camelcase": "off",
+      "react/prop-types": "off",
       "react/style-prop-object": "off",
       "prettier/prettier": "error",
       "react-hooks/rules-of-hooks": "error",
