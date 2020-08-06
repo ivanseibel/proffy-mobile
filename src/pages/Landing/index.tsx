@@ -16,6 +16,10 @@ const Landing: React.FC = () => {
     navigation.navigate('Teach');
   }, [navigation]);
 
+  const handleNavigateToStudyTabs = useCallback(() => {
+    navigation.navigate('StudyTabs');
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
       <Image source={landingImg} style={styles.banner} />
@@ -27,7 +31,10 @@ const Landing: React.FC = () => {
       </Text>
 
       <View style={styles.buttonsContainer}>
-        <RectButton style={[styles.button, styles.buttonPrimary]}>
+        <RectButton
+          style={[styles.button, styles.buttonPrimary]}
+          onPress={handleNavigateToStudyTabs}
+        >
           <Image source={studyIcon} />
 
           <Text style={styles.buttonText}>Study</Text>
