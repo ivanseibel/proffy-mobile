@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Image, Text } from 'react-native';
+import React, { useCallback } from 'react';
+import { View, Image, Text, Linking } from 'react-native';
 
 import { RectButton } from 'react-native-gesture-handler';
 import styles from './styles';
@@ -26,6 +26,10 @@ const TeacherItem: React.FC<ITeacherItemProps> = ({ teacher }) => {
   const avatar =
     teacher.avatar || `https://api.adorable.io/avatars/60/${teacher.name}.png`;
 
+  const handleOpenWhatsapp = useCallback(() => {
+    Linking.openURL(`whatsapp://send?phone=${teacher.whatsapp}`);
+  }, [teacher.whatsapp]);
+
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
@@ -51,7 +55,7 @@ const TeacherItem: React.FC<ITeacherItemProps> = ({ teacher }) => {
             <Image source={unfavoriteIcon} />
           </RectButton>
 
-          <RectButton style={styles.contactButton}>
+          <RectButton style={styles.contactButton} onPress={handleOpenWhatsapp}>
             <Image source={whatsappIcon} />
             <Text style={styles.contactButtonText}>Get in touch</Text>
           </RectButton>
