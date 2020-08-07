@@ -11,6 +11,7 @@ const Favorites: React.FC = () => {
       <PageHeader title="My favorite Proffys" />
 
       <ScrollView
+        showsVerticalScrollIndicator={false}
         style={styles.teacherList}
         contentContainerStyle={{
           paddingHorizontal: 16,

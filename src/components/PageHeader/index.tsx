@@ -29,6 +29,8 @@ const PageHeader: React.FC<IPageHeaderProps> = ({ title, children }) => {
       </View>
 
       <Text style={styles.title}>{title}</Text>
+
+      {children}
     </View>
   );
 };
