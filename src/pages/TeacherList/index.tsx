@@ -11,19 +11,10 @@ import { Feather } from '@expo/vector-icons';
 import styles from './styles';
 
 import PageHeader from '../../components/PageHeader';
-import TeacherItem from '../../components/TeacherItem';
 import Picker from '../../components/Picker';
 import api from '../../services/api';
-
-export interface ITeacher {
-  user_id: string;
-  avatar: string;
-  name: string;
-  subject: string;
-  bio: string;
-  cost: number;
-  whatsapp: string;
-}
+import { ITeacher } from '../../@types/teacher';
+import TeacherItem from '../../components/TeacherItem';
 
 const TeacherList: React.FC = () => {
   const [weekday, setSelectedWeekday] = useState('');
