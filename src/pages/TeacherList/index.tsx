@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import {
   ScrollView,
   TextInput,
@@ -13,9 +13,24 @@ import styles from './styles';
 import PageHeader from '../../components/PageHeader';
 import TeacherItem from '../../components/TeacherItem';
 import Picker from '../../components/Picker';
+import api from '../../services/api';
+
+export interface ITeacher {
+  user_id: string;
+  avatar: string;
+  name: string;
+  subject: string;
+  bio: string;
+  cost: number;
+  whatsapp: string;
+}
 
 const TeacherList: React.FC = () => {
-  const [selectedWeekday, setSelectedWeekday] = useState();
+  const [weekday, setSelectedWeekday] = useState('');
+  const [subject, setSubject] = useState('');
+  const [time, setTime] = useState('');
+  const [classes, setClasses] = useState<ITeacher[]>([]);
+
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const weekdays = [
     { label: 'Sunday', value: 0 },
@@ -37,6 +52,50 @@ const TeacherList: React.FC = () => {
     </BorderlessButton>
   );
 
+  const searchTeachers = useCallback(() => {
+    const filterIsIncomplete = subject === '' || weekday === '' || time === '';
+
+    if (filterIsIncomplete) {
+      Alert.alert(
+        'Error',
+        'Your must provide subject, week day and time to search by teachers',
+      );
+      return;
+    }
+
+    const params = {
+      week_day: weekday,
+      subject,
+      time,
+    };
+
+    api
+      .get<ITeacher[]>('classes', {
+        params,
+      })
+      .then(response => {
+        if (response.data.length === 0) {
+          Alert.alert('Warning', 'No classes found');
+        }
+        setClasses(
+          response.data.map(item => {
+            return {
+              ...item,
+              avatar: item.avatar
+                ? item.avatar
+                : `https://api.adorable.io/avatars/80/${item.name}.png`,
+            };
+          }),
+        );
+      })
+      .catch(error => {
+        Alert.alert(
+          'Error',
+          `There is an error getting classes list: ${error.message}`,
+        );
+      });
+  }, [subject, time, weekday]);
+
   return (
     <View style={styles.container}>
       <PageHeader title="Available Proffys" headerRight={headerFilterIcon}>
@@ -47,6 +106,8 @@ const TeacherList: React.FC = () => {
               placeholderTextColor="#c1bccc"
               style={styles.input}
               placeholder="Which subject?"
+              value={subject}
+              onChangeText={setSubject}
             />
 
             <View style={styles.inputGroup}>
@@ -67,10 +128,12 @@ const TeacherList: React.FC = () => {
                   placeholderTextColor="#c1bccc"
                   style={styles.input}
                   placeholder="Which time?"
+                  value={time}
+                  onChangeText={setTime}
                 />
               </View>
             </View>
-            <RectButton style={styles.submitButton}>
+            <RectButton style={styles.submitButton} onPress={searchTeachers}>
               <Text style={styles.submitButtonText}>Search</Text>
             </RectButton>
           </View>
@@ -84,12 +147,9 @@ const TeacherList: React.FC = () => {
           paddingBottom: 16,
         }}
       >
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
+        {classes.map((item, index) => (
+          <TeacherItem teacher={item} key={index} />
+        ))}
       </ScrollView>
     </View>
   );

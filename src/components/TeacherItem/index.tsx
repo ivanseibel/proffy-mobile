@@ -8,30 +8,42 @@ import heartOutlineIcon from '../../assets/images/icons/heart-outline.png';
 import unfavoriteIcon from '../../assets/images/icons/unfavorite.png';
 import whatsappIcon from '../../assets/images/icons/whatsapp.png';
 
-const TeacherItem: React.FC = () => {
+export interface ITeacher {
+  user_id: string;
+  avatar: string;
+  name: string;
+  subject: string;
+  bio: string;
+  cost: number;
+  whatsapp: string;
+}
+
+interface ITeacherItemProps {
+  teacher: ITeacher;
+}
+
+const TeacherItem: React.FC<ITeacherItemProps> = ({ teacher }) => {
+  const avatar =
+    teacher.avatar || `https://api.adorable.io/avatars/60/${teacher.name}.png`;
+
+  const handle;
   return (
     <View style={styles.container}>
       <View style={styles.profile}>
-        <Image
-          style={styles.avatar}
-          source={{ uri: 'https://github.com/ivanseibel.png' }}
-        />
+        <Image style={styles.avatar} source={{ uri: avatar }} />
 
         <View style={styles.profileInfo}>
-          <Text style={styles.name}>Ivan Seibel</Text>
-          <Text style={styles.subject}>Chemistry</Text>
+          <Text style={styles.name}>{teacher.name}</Text>
+          <Text style={styles.subject}>{teacher.subject}</Text>
         </View>
       </View>
 
-      <Text style={styles.bio}>
-        Full stack developer JavaScript | TypeScript | ReactJS | React Native |
-        Node.js
-      </Text>
+      <Text style={styles.bio}>{teacher.bio}</Text>
 
       <View style={styles.footer}>
         <Text style={styles.price}>
           {`Price/hour   `}
-          <Text style={styles.priceValue}>US$ 20.00</Text>
+          <Text style={styles.priceValue}>{`US$ ${teacher.cost}`}</Text>
         </Text>
 
         <View style={styles.buttonsContainer}>

@@ -22,7 +22,7 @@ interface IPickerProps {
   inputStyle?: StyleProp<ViewStyle>;
   pickerValues: IPickerValuesItem[];
   placeholder?: string;
-  onChange: React.Dispatch<React.SetStateAction<undefined>>;
+  onChange: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const Picker: React.FC<IPickerProps> = ({
@@ -50,11 +50,14 @@ const Picker: React.FC<IPickerProps> = ({
     return null;
   }, [pickerSelection, pickerValues]);
 
-  const handlePickerItemClick = useCallback(value => {
-    setPickerSelection(value);
-    onChange(value);
-    setPickerDisplayed(false);
-  }, []);
+  const handlePickerItemClick = useCallback(
+    value => {
+      setPickerSelection(value);
+      onChange(value);
+      setPickerDisplayed(false);
+    },
+    [onChange],
+  );
 
   return (
     <View>
