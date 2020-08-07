@@ -16,7 +16,7 @@ import Picker from '../../components/Picker';
 
 const TeacherList: React.FC = () => {
   const [selectedWeekday, setSelectedWeekday] = useState();
-  const [isFiltersvisible, setIsFiltersVisible] = useState(false);
+  const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const weekdays = [
     { label: 'Sunday', value: 0 },
     { label: 'Monday', value: 1 },
@@ -31,17 +31,16 @@ const TeacherList: React.FC = () => {
     setIsFiltersVisible(state => !state);
   }, []);
 
+  const headerFilterIcon: React.ReactNode = (
+    <BorderlessButton onPress={handleToggleShowFilters}>
+      <Feather name="filter" size={20} color="#fff" />
+    </BorderlessButton>
+  );
+
   return (
     <View style={styles.container}>
-      <PageHeader
-        title="Available Proffys"
-        headerRight={
-          <BorderlessButton onPress={handleToggleShowFilters}>
-            <Feather name="filter" size={20} color="#fff" />
-          </BorderlessButton>
-        }
-      >
-        {isFiltersvisible && (
+      <PageHeader title="Available Proffys" headerRight={headerFilterIcon}>
+        {isFiltersVisible && (
           <View style={styles.searchForm}>
             <Text style={styles.label}>Subject</Text>
             <TextInput
