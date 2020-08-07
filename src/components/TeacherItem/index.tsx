@@ -26,7 +26,6 @@ const TeacherItem: React.FC<ITeacherItemProps> = ({ teacher }) => {
   const avatar =
     teacher.avatar || `https://api.adorable.io/avatars/60/${teacher.name}.png`;
 
-  const handle;
   return (
     <View style={styles.container}>
       <View style={styles.profile}>

@@ -76,6 +76,7 @@ const TeacherList: React.FC = () => {
       .then(response => {
         if (response.data.length === 0) {
           Alert.alert('Warning', 'No classes found');
+          return;
         }
         setClasses(
           response.data.map(item => {
@@ -87,6 +88,7 @@ const TeacherList: React.FC = () => {
             };
           }),
         );
+        setIsFiltersVisible(false);
       })
       .catch(error => {
         Alert.alert(
