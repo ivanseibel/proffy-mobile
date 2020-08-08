@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Image, Text, Linking } from 'react-native';
 
 import { RectButton } from 'react-native-gesture-handler';
+import { useIsFocused } from '@react-navigation/native';
 import styles from './styles';
 
 import heartOutlineIcon from '../../assets/images/icons/heart-outline.png';
@@ -16,9 +17,13 @@ import {
 
 interface ITeacherItemProps {
   teacher: ITeacher;
+  onUpdateFavorite(): void;
 }
 
-const TeacherItem: React.FC<ITeacherItemProps> = ({ teacher }) => {
+const TeacherItem: React.FC<ITeacherItemProps> = ({
+  teacher,
+  onUpdateFavorite,
+}) => {
   const avatar =
     teacher.avatar || `https://api.adorable.io/avatars/60/${teacher.name}.png`;
   const [isFavorited, setIsFavorited] = useState(false);
@@ -27,22 +32,28 @@ const TeacherItem: React.FC<ITeacherItemProps> = ({ teacher }) => {
     Linking.openURL(`whatsapp://send?phone=${teacher.whatsapp}`);
   }, [teacher.whatsapp]);
 
+  const isFocused = useIsFocused();
+
   useEffect(() => {
-    getTeacher(`@TeacherClass:${teacher.id}`).then(favoritedTeacher => {
+    getTeacher(teacher.id).then(favoritedTeacher => {
       setIsFavorited(!!favoritedTeacher);
     });
-  }, [teacher.id]);
+  }, [teacher.id, isFocused]);
 
   const toggleFavorited = useCallback(async () => {
     if (isFavorited) {
-      await removeTeacher(`@TeacherClass:${teacher.id}`);
+      await removeTeacher(teacher.id);
       setIsFavorited(false);
+
+      if (onUpdateFavorite) {
+        onUpdateFavorite();
+      }
       return;
     }
 
     await storeTeacher(teacher);
     setIsFavorited(true);
-  }, [isFavorited, teacher]);
+  }, [isFavorited, onUpdateFavorite, teacher]);
 
   return (
     <View style={styles.container}>

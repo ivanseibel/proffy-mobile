@@ -3,13 +3,11 @@ import {
   View,
   Modal,
   Text,
-  TouchableHighlight,
   ViewStyle,
   StyleProp,
   TouchableOpacity,
 } from 'react-native';
 
-// import { TouchableOpacity } from 'react-native-gesture-handler';
 import styles from './styles';
 
 interface IPickerValuesItem {
@@ -22,7 +20,7 @@ interface IPickerProps {
   inputStyle?: StyleProp<ViewStyle>;
   pickerValues: IPickerValuesItem[];
   placeholder?: string;
-  onChange: React.Dispatch<React.SetStateAction<any>>;
+  onChange(value: string): void;
 }
 
 const Picker: React.FC<IPickerProps> = ({
@@ -32,7 +30,7 @@ const Picker: React.FC<IPickerProps> = ({
   placeholder = 'Select an option',
   onChange,
 }) => {
-  const [pickerSelection, setPickerSelection] = useState<number | string>(null);
+  const [pickerSelection, setPickerSelection] = useState<number | string>();
   const [pickerDisplayed, setPickerDisplayed] = useState(false);
 
   const togglePicker = useCallback(() => {
@@ -99,12 +97,12 @@ const Picker: React.FC<IPickerProps> = ({
               );
             })}
 
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() => togglePicker()}
               style={{ paddingTop: 4, paddingBottom: 4 }}
             >
               <Text style={{ color: '#999' }}>Cancel</Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

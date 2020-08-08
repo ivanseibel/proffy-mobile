@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Image, Text } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
@@ -8,8 +8,11 @@ import landingImg from '../../assets/images/landing.png';
 import studyIcon from '../../assets/images/icons/study.png';
 import teachIcon from '../../assets/images/icons/give-classes.png';
 import heartIcon from '../../assets/images/icons/heart.png';
+import { clearAll } from '../../services/asyncStorage';
 
 const Landing: React.FC = () => {
+  // clearAll();
+
   const navigation = useNavigation();
 
   const handleNavigateToTeachPage = useCallback(() => {

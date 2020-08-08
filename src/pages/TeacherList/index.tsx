@@ -89,6 +89,10 @@ const TeacherList: React.FC = () => {
       });
   }, [subject, time, weekday]);
 
+  const handleChangeWeekday = useCallback((newWeekday: string) => {
+    setSelectedWeekday(newWeekday);
+  }, []);
+
   return (
     <View style={styles.container}>
       <PageHeader title="Available Proffys" headerRight={headerFilterIcon}>
@@ -111,7 +115,7 @@ const TeacherList: React.FC = () => {
                   pickerValues={weekdays}
                   placeholder="Which weekday?"
                   inputStyle={styles.picker}
-                  onChange={setSelectedWeekday}
+                  onChange={handleChangeWeekday}
                 />
               </View>
 

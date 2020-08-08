@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView } from 'react-native';
 
+import { useIsFocused, useFocusEffect } from '@react-navigation/native';
 import styles from './styles';
 import PageHeader from '../../components/PageHeader';
 import TeacherItem from '../../components/TeacherItem';
+import { ITeacher } from '../../@types/teacher';
+import { getAllTeachers } from '../../services/asyncStorage';
 
 const Favorites: React.FC = () => {
+  const [classes, setClasses] = useState<ITeacher[]>([]);
+  const [updateFavorite, setUpdateFavorite] = useState(false);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    console.log(updateFavorite);
+    getAllTeachers().then(teacherClasses => {
+      if (teacherClasses) {
+        setClasses(teacherClasses);
+        return;
+      }
+      setClasses([]);
+    });
+  }, [isFocused, updateFavorite]);
+
+  const toggleUpdateFavorite = useCallback(() => {
+    setUpdateFavorite(state => !state);
+  }, []);
+
   return (
     <View style={styles.container}>
       <PageHeader title="My favorite Proffys" />
@@ -18,12 +41,13 @@ const Favorites: React.FC = () => {
           paddingBottom: 16,
         }}
       >
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
-        <TeacherItem />
+        {classes.map((item, index) => (
+          <TeacherItem
+            teacher={item}
+            key={index}
+            onUpdateFavorite={toggleUpdateFavorite}
+          />
+        ))}
       </ScrollView>
     </View>
   );
