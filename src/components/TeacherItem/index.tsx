@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Image, Text, Linking } from 'react-native';
+import { View, Image, Text, Linking, Alert } from 'react-native';
 
 import { RectButton } from 'react-native-gesture-handler';
 import { useIsFocused } from '@react-navigation/native';
@@ -14,6 +14,7 @@ import {
   storeTeacher,
   removeTeacher,
 } from '../../services/asyncStorage';
+import api from '../../services/api';
 
 interface ITeacherItemProps {
   teacher: ITeacher;
@@ -28,9 +29,25 @@ const TeacherItem: React.FC<ITeacherItemProps> = ({
     teacher.avatar || `https://api.adorable.io/avatars/60/${teacher.name}.png`;
   const [isFavorited, setIsFavorited] = useState(false);
 
+  const createConnection = useCallback(() => {
+    api.post('connections', { user_id: teacher.user_id }).catch(error => {
+      Alert.alert(
+        'Error',
+        `There is an error while contacting teacher: ${error}`,
+      );
+    });
+  }, [teacher.user_id]);
+
   const handleOpenWhatsapp = useCallback(() => {
-    Linking.openURL(`whatsapp://send?phone=${teacher.whatsapp}`);
-  }, [teacher.whatsapp]);
+    Linking.canOpenURL(`whatsapp://send?phone=${teacher.whatsapp}`).then(
+      canOpen => {
+        if (canOpen) {
+          createConnection();
+          Linking.openURL(`whatsapp://send?phone=${teacher.whatsapp}`);
+        }
+      },
+    );
+  }, [createConnection, teacher.whatsapp]);
 
   const isFocused = useIsFocused();
 
@@ -76,7 +93,11 @@ const TeacherItem: React.FC<ITeacherItemProps> = ({
 
         <View style={styles.buttonsContainer}>
           <RectButton
-            style={[styles.favoriteButton, styles.favorited]}
+            style={
+              isFavorited
+                ? [styles.favoriteButton, styles.favorited]
+                : styles.favoriteButton
+            }
             onPress={toggleFavorited}
           >
             {isFavorited ? (
