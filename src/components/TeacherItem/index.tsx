@@ -17,7 +17,7 @@ import {
 
 interface ITeacherItemProps {
   teacher: ITeacher;
-  onUpdateFavorite(): void;
+  onUpdateFavorite?(): void;
 }
 
 const TeacherItem: React.FC<ITeacherItemProps> = ({
