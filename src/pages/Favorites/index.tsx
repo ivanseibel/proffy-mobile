@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView } from 'react-native';
 
-import { useIsFocused, useFocusEffect } from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import styles from './styles';
 import PageHeader from '../../components/PageHeader';
 import TeacherItem from '../../components/TeacherItem';
@@ -15,7 +15,6 @@ const Favorites: React.FC = () => {
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    console.log(updateFavorite);
     getAllTeachers().then(teacherClasses => {
       if (teacherClasses) {
         setClasses(teacherClasses);

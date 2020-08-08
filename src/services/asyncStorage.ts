@@ -98,5 +98,6 @@ export const clearAll = async (): Promise<void> => {
     // clear error
   }
 
+  // eslint-disable-next-line no-console
   console.log('Done.');
 };
